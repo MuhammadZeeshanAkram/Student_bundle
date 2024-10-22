@@ -1,34 +1,32 @@
-const ToDoService = require('../services/todo_services');
+const Todo = require('../model/todo_model');
 
-exports.createToDo =  async (req,res,next)=>{
+exports.createToDo = async (req, res) => {
     try {
-        const { userId,title, desc } = req.body;
-        let todoData = await ToDoService.createToDo(userId,title, desc);
-        res.json({status: true,success:todoData});
+        const { userId, title, desc } = req.body;
+        const todo = new Todo({ userId, title, desc });
+        await todo.save();
+        res.status(201).json({ status: true, success: todo });
     } catch (error) {
-        console.log(error, 'err---->');
-        next(error);
+        res.status(500).json({ status: false, message: error.message });
     }
-}
+};
 
-exports.getToDoList =  async (req,res,next)=>{
+exports.getToDoList = async (req, res) => {
     try {
         const { userId } = req.body;
-        let todoData = await ToDoService.getUserToDoList(userId);
-        res.json({status: true,success:todoData});
+        const todos = await Todo.find({ userId });
+        res.json({ status: true, success: todos });
     } catch (error) {
-        console.log(error, 'err---->');
-        next(error);
+        res.status(500).json({ status: false, message: error.message });
     }
-}
+};
 
-exports.deleteToDo =  async (req,res,next)=>{
+exports.deleteToDo = async (req, res) => {
     try {
         const { id } = req.body;
-        let deletedData = await ToDoService.deleteToDo(id);
-        res.json({status: true,success:deletedData});
+        const deletedTodo = await Todo.findByIdAndDelete(id);
+        res.json({ status: true, success: deletedTodo });
     } catch (error) {
-        console.log(error, 'err---->');
-        next(error);
+        res.status(500).json({ status: false, message: error.message });
     }
-}
+};

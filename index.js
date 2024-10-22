@@ -1,9 +1,7 @@
-const app=require('./app');
-const db=require('./config/db');
-const ToDoModel=require('./model/todo_model');
+const app = require('./app');
+const db = require('./config/db'); // You can set up your MongoDB connection here
 
-const port=process.env.PORT || 10000;
-app.listen(port,()=>{
-    
-    console.log(`server is running on port ${port}`);
-})
+const port = process.env.PORT || 9000;
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});
